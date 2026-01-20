@@ -53,10 +53,12 @@ id = "REPLACE_WITH_NAMESPACE_ID"
 - `ANTHROPIC_API_KEY`: If set, the Worker calls Claude on submit and stores the draft.
 - `CLAUDE_MODEL`: Optional override (default: `claude-3-5-sonnet-20241022`).
 - `CLAUDE_MAX_TOKENS`: Optional override (default: `1200`).
+- `ENABLE_CLAUDE_ON_SUBMIT`: Optional; set to `true` to run Claude on submit (default: off).
 
 ## Endpoints
 
 - `POST /api/submit` → store a submission
+- `POST /api/generate-article` → generate blog article from brief via Claude
 - `GET /api/submissions` → list submissions (requires `ADMIN_TOKEN` if set)
 - `GET /api/submission/:id` → fetch a submission (requires `ADMIN_TOKEN` if set)
 

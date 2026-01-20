@@ -302,6 +302,11 @@
             color: var(--text-muted);
         }
 
+        .section-divider {
+            margin: 2rem 0 1rem;
+            border-top: 1px solid var(--border);
+        }
+
         .status {
             margin-top: 1rem;
             padding: 0.75rem 1rem;
@@ -502,6 +507,7 @@
                 <button type="button" class="btn-secondary" onclick="generateBrief()">Generate Brief</button>
                 <button type="button" class="btn-primary" onclick="copyBrief()">Copy to Clipboard</button>
                 <button type="button" class="btn-primary" onclick="submitBrief()">Save to Cloudflare</button>
+                <button type="button" class="btn-primary" onclick="generateArticle()">Generate Blog Article</button>
             </div>
         </form>
 
@@ -511,11 +517,19 @@
                 <span class="copy-status" id="copyStatus">✓ Copied!</span>
             </div>
             <div class="output-preview" id="outputPreview"></div>
-            <div class="claude-output" id="claudeOutput" style="display:none;">
-                <h3>Claude Draft</h3>
-                <div class="output-preview" id="claudePreview"></div>
-            </div>
             <div class="status info" id="submissionStatus" style="display:none;"></div>
+        </div>
+
+        <div class="output-section" id="articleSection">
+            <div class="output-header">
+                <h2>Generated Article</h2>
+                <span class="copy-status" id="articleCopyStatus">✓ Copied!</span>
+            </div>
+            <div class="output-preview" id="articlePreview"></div>
+            <div class="status info" id="articleStatus" style="display:none;"></div>
+            <div class="actions">
+                <button type="button" class="btn-secondary" onclick="copyArticle()">Copy Article</button>
+            </div>
         </div>
     </div>
 
@@ -524,6 +538,7 @@
     <script>
         let lastBrief = '';
         let lastPayload = null;
+        let lastArticle = '';
         const csrfToken = initCsrfToken();
 
         function generateBrief() {
@@ -576,6 +591,7 @@
             const outputPreview = document.getElementById('outputPreview');
             outputPreview.textContent = brief;
             outputSection.classList.add('visible');
+            document.getElementById('articleSection').classList.remove('visible');
             lastBrief = brief;
             lastPayload = buildPayload(data, brief);
             setSubmissionStatus('Not submitted yet', 'info');
@@ -651,16 +667,11 @@
             statusEl.style.display = 'block';
         }
 
-        function setClaudeDraft(text) {
-            const wrapper = document.getElementById('claudeOutput');
-            const preview = document.getElementById('claudePreview');
-            if (!text) {
-                wrapper.style.display = 'none';
-                preview.textContent = '';
-                return;
-            }
-            preview.textContent = text;
-            wrapper.style.display = 'block';
+        function setArticleStatus(message, type) {
+            const statusEl = document.getElementById('articleStatus');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            statusEl.style.display = 'block';
         }
 
         async function submitBrief() {
@@ -669,7 +680,6 @@
             const payload = lastPayload || buildPayload(new FormData(document.getElementById('briefForm')), brief);
             try {
                 setSubmissionStatus('Submitting to Cloudflare...', 'info');
-                setClaudeDraft('');
                 const response = await fetch('/api/submit', {
                     method: 'POST',
                     headers: {
@@ -684,11 +694,58 @@
                     return;
                 }
                 setSubmissionStatus(`Saved. Submission ID: ${result.id}`, 'success');
-                if (result?.claude?.output) {
-                    setClaudeDraft(result.claude.output);
-                }
             } catch (err) {
                 setSubmissionStatus('Network error while submitting', 'error');
+            }
+        }
+
+        async function generateArticle() {
+            const brief = lastBrief || generateBrief();
+            if (!brief) return;
+            const metadata = {
+                title: document.getElementById('title').value || '',
+                audience: document.getElementById('audience').value || '',
+                tone: document.querySelector('input[name="tone"]:checked')?.value || ''
+            };
+            try {
+                setArticleStatus('Generating article with Claude...', 'info');
+                const response = await fetch('/api/generate-article', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify({ brief, metadata })
+                });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok || !result?.article?.output) {
+                    setArticleStatus(result?.article?.error || result?.error || 'Generation failed', 'error');
+                    return;
+                }
+                lastArticle = result.article.output;
+                const articleSection = document.getElementById('articleSection');
+                document.getElementById('articlePreview').textContent = lastArticle;
+                articleSection.classList.add('visible');
+                setArticleStatus('Article generated', 'success');
+                articleSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (err) {
+                setArticleStatus('Network error while generating', 'error');
+            }
+        }
+
+        async function copyArticle() {
+            if (!lastArticle) {
+                showToast('Generate the article first', 'error');
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(lastArticle);
+                const copyStatus = document.getElementById('articleCopyStatus');
+                copyStatus.classList.add('visible');
+                setTimeout(() => copyStatus.classList.remove('visible'), 2000);
+                showToast('Article copied to clipboard!');
+            } catch (err) {
+                showToast('Failed to copy article', 'error');
             }
         }
 

@@ -60,7 +60,7 @@ export async function onRequest(context) {
     status: "submitted"
   };
 
-  if (env?.ANTHROPIC_API_KEY) {
+  if (env?.ANTHROPIC_API_KEY && env?.ENABLE_CLAUDE_ON_SUBMIT === "true") {
     const claudeResult = await callClaude(submission, env);
     submission.claude = claudeResult;
   }
