@@ -50,12 +50,18 @@ id = "REPLACE_WITH_NAMESPACE_ID"
 - `ALLOWED_ORIGINS`: Comma-separated list of allowed origins for POSTs.
   - If unset, defaults to the current Pages origin.
 - `ADMIN_TOKEN`: If set, required for listing and fetching submissions.
+- `ANTHROPIC_API_KEY`: If set, the Worker calls Claude on submit and stores the draft.
+- `CLAUDE_MODEL`: Optional override (default: `claude-3-5-sonnet-20241022`).
+- `CLAUDE_MAX_TOKENS`: Optional override (default: `1200`).
 
 ## Endpoints
 
 - `POST /api/submit` → store a submission
 - `GET /api/submissions` → list submissions (requires `ADMIN_TOKEN` if set)
 - `GET /api/submission/:id` → fetch a submission (requires `ADMIN_TOKEN` if set)
+
+When `ANTHROPIC_API_KEY` is set, `POST /api/submit` also returns a `claude` object
+and stores it inside the submission.
 
 ### Example (Claude/web_fetch)
 
