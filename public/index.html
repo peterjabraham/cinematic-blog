@@ -291,6 +291,17 @@
             overflow-y: auto;
         }
 
+        .claude-output {
+            margin-top: 1rem;
+        }
+
+        .claude-output h3 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
         .status {
             margin-top: 1rem;
             padding: 0.75rem 1rem;
@@ -500,6 +511,10 @@
                 <span class="copy-status" id="copyStatus">✓ Copied!</span>
             </div>
             <div class="output-preview" id="outputPreview"></div>
+            <div class="claude-output" id="claudeOutput" style="display:none;">
+                <h3>Claude Draft</h3>
+                <div class="output-preview" id="claudePreview"></div>
+            </div>
             <div class="status info" id="submissionStatus" style="display:none;"></div>
         </div>
     </div>
@@ -636,12 +651,25 @@
             statusEl.style.display = 'block';
         }
 
+        function setClaudeDraft(text) {
+            const wrapper = document.getElementById('claudeOutput');
+            const preview = document.getElementById('claudePreview');
+            if (!text) {
+                wrapper.style.display = 'none';
+                preview.textContent = '';
+                return;
+            }
+            preview.textContent = text;
+            wrapper.style.display = 'block';
+        }
+
         async function submitBrief() {
             const brief = lastBrief || generateBrief();
             if (!brief) return;
             const payload = lastPayload || buildPayload(new FormData(document.getElementById('briefForm')), brief);
             try {
                 setSubmissionStatus('Submitting to Cloudflare...', 'info');
+                setClaudeDraft('');
                 const response = await fetch('/api/submit', {
                     method: 'POST',
                     headers: {
@@ -656,6 +684,9 @@
                     return;
                 }
                 setSubmissionStatus(`Saved. Submission ID: ${result.id}`, 'success');
+                if (result?.claude?.output) {
+                    setClaudeDraft(result.claude.output);
+                }
             } catch (err) {
                 setSubmissionStatus('Network error while submitting', 'error');
             }
