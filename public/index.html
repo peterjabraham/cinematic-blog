@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinematic Blog Post Brief</title>
+    <style>
+        :root {
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --surface-hover: #242424;
+            --border: #333;
+            --text: #e5e5e5;
+            --text-muted: #888;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .form-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-section h2 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .required-badge {
+            background: var(--accent);
+            color: white;
+            font-size: 0.625rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .optional-badge {
+            background: var(--border);
+            color: var(--text-muted);
+            font-size: 0.625rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .label-hint {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        textarea.short {
+            min-height: 80px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .checkbox-item span {
+            font-size: 0.9375rem;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .radio-item {
+            position: relative;
+        }
+
+        .radio-item input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .radio-item label {
+            display: block;
+            padding: 0.5rem 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            font-weight: 400;
+        }
+
+        .radio-item input:checked + label {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .radio-item:hover label {
+            border-color: var(--accent);
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-hover);
+            border-color: var(--accent);
+        }
+
+        .output-section {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .output-section.visible {
+            display: block;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .output-header h2 {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .copy-status {
+            font-size: 0.875rem;
+            color: var(--success);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .copy-status.visible {
+            opacity: 1;
+        }
+
+        .output-preview {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .status {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            background: var(--surface);
+            border-left: 4px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .status.success {
+            border-left-color: var(--success);
+            color: var(--text);
+        }
+
+        .status.error {
+            border-left-color: var(--error);
+            color: var(--text);
+        }
+
+        .status.info {
+            border-left-color: var(--accent);
+            color: var(--text);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.visible {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+
+            .radio-item label {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📽️ Cinematic Blog Post Brief</h1>
+            <p class="subtitle">Fill out this form, then paste the output into Claude</p>
+        </header>
+
+        <form id="briefForm">
+            <!-- Required Section -->
+            <div class="form-section">
+                <h2><span class="required-badge">Required</span> Core Details</h2>
+                
+                <div class="form-group">
+                    <label for="topic">
+                        Topic
+                        <span class="label-hint">— What is this post about?</span>
+                    </label>
+                    <textarea id="topic" name="topic" placeholder="e.g., The implementation of Gen AI in the workplace — mostly bottom-up, not top-down" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="audience">
+                        Target Audience
+                        <span class="label-hint">— Who will read this?</span>
+                    </label>
+                    <input type="text" id="audience" name="audience" placeholder="e.g., Business executives, HR leaders, tech founders" required>
+                </div>
+            </div>
+
+            <!-- Optional Section: Direction -->
+            <div class="form-section">
+                <h2><span class="optional-badge">Optional</span> Direction</h2>
+
+                <div class="form-group">
+                    <label for="pov">
+                        Point of View / Thesis
+                        <span class="label-hint">— What should the reader believe by the end?</span>
+                    </label>
+                    <textarea id="pov" name="pov" class="short" placeholder="e.g., Employees adopted AI faster than leadership, inverting the traditional tech adoption curve"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">
+                        Working Title
+                        <span class="label-hint">— If you have one in mind</span>
+                    </label>
+                    <input type="text" id="title" name="title" placeholder="e.g., The Quiet Revolution">
+                </div>
+
+                <div class="form-group">
+                    <label>Tone</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="tone-provocative" name="tone" value="Provocative — challenge assumptions, use rhetorical questions">
+                            <label for="tone-provocative">Provocative</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="tone-thoughtful" name="tone" value="Thoughtful — measured analysis, acknowledge complexity">
+                            <label for="tone-thoughtful">Thoughtful</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="tone-urgent" name="tone" value="Urgent — short sentences, stakes-focused, call to action">
+                            <label for="tone-urgent">Urgent</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="tone-hopeful" name="tone" value="Hopeful — solution-oriented, forward-looking">
+                            <label for="tone-hopeful">Hopeful</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Optional Section: Sources -->
+            <div class="form-section">
+                <h2><span class="optional-badge">Optional</span> Insights & Sources</h2>
+
+                <div class="form-group">
+                    <label for="sources">
+                        Links, Data, Quotes
+                        <span class="label-hint">— Paste URLs, statistics, or raw thoughts to incorporate</span>
+                    </label>
+                    <textarea id="sources" name="sources" placeholder="Paste links, articles, data points, or quotes you want included..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="scenes">
+                        Scenes or Examples
+                        <span class="label-hint">— Specific scenarios or characters to feature</span>
+                    </label>
+                    <textarea id="scenes" name="scenes" class="short" placeholder="e.g., A middle manager discovering their team is secretly using AI; contrast between startup and enterprise"></textarea>
+                </div>
+            </div>
+
+            <!-- Optional Section: Preferences -->
+            <div class="form-section">
+                <h2><span class="optional-badge">Optional</span> Preferences</h2>
+
+                <div class="form-group">
+                    <label>Length</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="length-short" name="length" value="Short (800–1,200 words)">
+                            <label for="length-short">Short (800–1,200)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="length-medium" name="length" value="Medium (1,500–2,000 words)" checked>
+                            <label for="length-medium">Medium (1,500–2,000)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="length-long" name="length" value="Long-form (2,500+ words)">
+                            <label for="length-long">Long (2,500+)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="avoid">
+                        Anything to Avoid
+                        <span class="label-hint">— Topics, angles, or phrases you don't want</span>
+                    </label>
+                    <textarea id="avoid" name="avoid" class="short" placeholder="e.g., Don't mention specific company names; avoid doom-and-gloom framing"></textarea>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn-secondary" onclick="generateBrief()">Generate Brief</button>
+                <button type="button" class="btn-primary" onclick="copyBrief()">Copy to Clipboard</button>
+                <button type="button" class="btn-primary" onclick="submitBrief()">Save to Cloudflare</button>
+            </div>
+        </form>
+
+        <div class="output-section" id="outputSection">
+            <div class="output-header">
+                <h2>Generated Brief</h2>
+                <span class="copy-status" id="copyStatus">✓ Copied!</span>
+            </div>
+            <div class="output-preview" id="outputPreview"></div>
+            <div class="status info" id="submissionStatus" style="display:none;"></div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let lastBrief = '';
+        let lastPayload = null;
+        const csrfToken = initCsrfToken();
+
+        function generateBrief() {
+            const form = document.getElementById('briefForm');
+            const data = new FormData(form);
+            
+            // Validate required fields
+            if (!data.get('topic') || !data.get('audience')) {
+                showToast('Please fill in the required fields', 'error');
+                return;
+            }
+
+            // Build the brief
+            let brief = `## Cinematic Blog Post Brief\n\n`;
+            brief += `**TOPIC**\n${data.get('topic')}\n\n`;
+            brief += `**TARGET AUDIENCE**\n${data.get('audience')}\n\n`;
+
+            if (data.get('pov')) {
+                brief += `**POINT OF VIEW / THESIS**\n${data.get('pov')}\n\n`;
+            }
+
+            if (data.get('title')) {
+                brief += `**WORKING TITLE**\n${data.get('title')}\n\n`;
+            }
+
+            if (data.get('tone')) {
+                brief += `**TONE**\n${data.get('tone')}\n\n`;
+            }
+
+            if (data.get('sources')) {
+                brief += `**INSIGHTS & SOURCES**\n${data.get('sources')}\n\n`;
+            }
+
+            if (data.get('scenes')) {
+                brief += `**SCENES OR EXAMPLES**\n${data.get('scenes')}\n\n`;
+            }
+
+            if (data.get('length')) {
+                brief += `**LENGTH**\n${data.get('length')}\n\n`;
+            }
+
+            if (data.get('avoid')) {
+                brief += `**AVOID**\n${data.get('avoid')}\n\n`;
+            }
+
+            brief += `---\n\nPlease research this topic using web search, then draft a full blog post using the cinematic narrative structure (Hook → Setup → Inciting Incident → Rising Action → Climax → Resolution → Echo).`;
+
+            // Show output
+            const outputSection = document.getElementById('outputSection');
+            const outputPreview = document.getElementById('outputPreview');
+            outputPreview.textContent = brief;
+            outputSection.classList.add('visible');
+            lastBrief = brief;
+            lastPayload = buildPayload(data, brief);
+            setSubmissionStatus('Not submitted yet', 'info');
+            
+            // Scroll to output
+            outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            return brief;
+        }
+
+        async function copyBrief() {
+            const brief = generateBrief();
+            if (!brief) return;
+
+            try {
+                await navigator.clipboard.writeText(brief);
+                
+                // Show copy status
+                const copyStatus = document.getElementById('copyStatus');
+                copyStatus.classList.add('visible');
+                setTimeout(() => copyStatus.classList.remove('visible'), 2000);
+                
+                showToast('Brief copied to clipboard!');
+            } catch (err) {
+                showToast('Failed to copy to clipboard', 'error');
+            }
+        }
+
+        function buildPayload(data, brief) {
+            return {
+                id: crypto.randomUUID(),
+                created_at: new Date().toISOString(),
+                status: 'draft',
+                topic: data.get('topic') || '',
+                audience: data.get('audience') || '',
+                pov: data.get('pov') || '',
+                title: data.get('title') || '',
+                tone: data.get('tone') || '',
+                sources: data.get('sources') || '',
+                scenes: data.get('scenes') || '',
+                length: data.get('length') || '',
+                avoid: data.get('avoid') || '',
+                brief: brief || '',
+                metadata: {
+                    project_name: data.get('title') || '',
+                    author_email: ''
+                }
+            };
+        }
+
+        function initCsrfToken() {
+            const existing = getCookie('csrf_token');
+            if (existing) return existing;
+            const token = crypto.randomUUID();
+            const secure = location.protocol === 'https:' ? '; Secure' : '';
+            document.cookie = `csrf_token=${encodeURIComponent(token)}; Path=/; SameSite=Lax${secure}`;
+            return token;
+        }
+
+        function getCookie(name) {
+            return document.cookie
+                .split(';')
+                .map(part => part.trim())
+                .filter(Boolean)
+                .map(part => part.split('='))
+                .find(([key]) => key === name)?.[1] || '';
+        }
+
+        function setSubmissionStatus(message, type) {
+            const statusEl = document.getElementById('submissionStatus');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            statusEl.style.display = 'block';
+        }
+
+        async function submitBrief() {
+            const brief = lastBrief || generateBrief();
+            if (!brief) return;
+            const payload = lastPayload || buildPayload(new FormData(document.getElementById('briefForm')), brief);
+            try {
+                setSubmissionStatus('Submitting to Cloudflare...', 'info');
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok) {
+                    setSubmissionStatus(result.error || 'Submission failed', 'error');
+                    return;
+                }
+                setSubmissionStatus(`Saved. Submission ID: ${result.id}`, 'success');
+            } catch (err) {
+                setSubmissionStatus('Network error while submitting', 'error');
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast visible' + (type === 'error' ? ' error' : '');
+            
+            setTimeout(() => {
+                toast.classList.remove('visible');
+            }, 3000);
+        }
+
+        // Auto-generate on form change for live preview
+        document.getElementById('briefForm').addEventListener('input', () => {
+            const outputSection = document.getElementById('outputSection');
+            if (outputSection.classList.contains('visible')) {
+                generateBrief();
+            }
+        });
+    </script>
+</body>
+</html>
